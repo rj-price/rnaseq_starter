@@ -4,25 +4,24 @@
 #SBATCH --mem=2G
 #SBATCH --cpus-per-task=4
 
-# Forward reads = $1
-# Reverse reads = $2
-# Index = $3
-
-short=$(basename $1 | sed s/"_F_paired.fastq.gz"//g)
-
-ReadF=$1
-ReadR=$2
+# INPUTS
+Read_F=$1
+Read_R=$2
 Index=$3
 
+# OUTPUT PREFIX
+Short=$(basename $1 _F_paired.fastq.gz)
+
+# RUN SALMON QUANT
 salmon quant \
     -i $Index \
     -l A \
-    -1 $ReadF \
-    -2 $ReadR \
+    -1 $Read_F \
+    -2 $Read_R \
     --validateMappings \
     -p 4 \
     --numBootstraps 1000 \
     --dumpEq \
     --seqBias \
     --gcBias \
-    -o "$short"_quant
+    -o "$Short"_quant

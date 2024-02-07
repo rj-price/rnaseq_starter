@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 #SBATCH -J salmon
-#SBATCH --partition=medium
+#SBATCH --partition=short
 #SBATCH --mem=2G
 #SBATCH --cpus-per-task=4
 
-# transcriptome_cds = $1
+# INPUT
+Transcriptome=$1
 
-export MYCONDAPATH=/mnt/shared/scratch/jnprice/apps/conda
-source ${MYCONDAPATH}/bin/activate rna-seq
+# OUTPUT PREFIX
+Short=$(basename $1 .fasta)
 
-fileshort=$(basename $1 | sed s/".fasta"//g)
-
-salmon index -t $1 -i "$fileshort"_index --keepDuplicates -k 27
+# RUN SALMON INDEX
+salmon index -t $Transcriptome -i "$Short"_index --keepDuplicates -k 27

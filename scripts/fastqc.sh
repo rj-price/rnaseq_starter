@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 #SBATCH -J fastqc
-#SBATCH --partition=long
+#SBATCH --partition=short
 #SBATCH --mem=1G
 #SBATCH --cpus-per-task=2
 
-# reads = $1
+# INPUT
+Reads=$1
 
-mkdir fastqc_trimmed
-fastqc $1 -t 2 -o fastqc_trimmed
+# CREATE OUTPUT FOLDER
+mkdir fastqc
+
+# RUN FASTQC
+fastqc $Reads -t 2 -o fastqc
