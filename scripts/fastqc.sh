@@ -6,9 +6,18 @@
 
 # INPUT
 Reads=$1
+OutputDir=$2
+
+# CHECK INPUT
+if [[ ! -f "$Reads" || ! "$Reads" =~ \.(fq|fastq).gz$ ]]; then
+    echo -e "Error: Input file doesn't exist or has an invalid extension (.fq.gz or .fastq.gz required). \n"
+    echo -e "Usage: sbatch fastqc.sh <fastq_file.fq.gz> <output_directory> \n"
+    exit 1
+fi
 
 # CREATE OUTPUT FOLDER
-mkdir fastqc
+mkdir -p $OutputDir
 
 # RUN FASTQC
-fastqc $Reads -t 2 -o fastqc
+echo -e "Running FastQC with '$Reads'... \n"
+fastqc $Reads -t 2 -o $OutputDir
