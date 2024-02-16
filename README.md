@@ -1,18 +1,36 @@
 # Analysis of RNAseq data
 
+Environmental variable (change this to actual path):
+```
+scripts_dir=/dir/to/rnaseq_starter/scripts
+```
+
 ## FastQC
 Used to check various quality metrics of reads.
 
+Set the reads and output directories (change these to the actual paths):
+```
+reads_dir=/dir/to/reads/
+out_dir=/dir/to/output/fastqc_results
+```
+
 To run on a single file:
 ```
-sbatch scripts/fastqc.sh /dir/to/reads/file.fastq.gz
+sbatch $scripts_dir/fastqc.sh $reads_dir/file.fq.gz $out_dir
 ```
 
 To loop through multiple files:
 ```
-for file in /dir/to/reads/*fastq.gz;
-    do scripts/fastqc.sh $file
-    done
+for file in "$reads_dir"/*.fq.gz; do
+    # Extract filename without extension
+    filename="${file%.*}"
+
+    # Submit your script with appropriate arguments
+    sbatch -o "$out_dir/fastqc_$filename.out" \
+        -e "$out_dir/fastqc_$filename.err" \
+        $scripts_dir/fastqc.sh "$file" "$out_dir"
+
+done
 ```
 
 ## MultiQC
@@ -20,7 +38,7 @@ Used to aggregate QC output into a single report for ease of visualisation.
 
 To run on a directory containing QC reports:
 ```
-multiqc fastqc/
+multiqc fastqc_results/
 ```
 
 ## Trimmomatic

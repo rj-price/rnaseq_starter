@@ -19,5 +19,4 @@ fi
 mkdir -p $OutputDir
 
 # RUN FASTQC
-echo -e "Running FastQC with '$Reads'... \n"
 fastqc $Reads -t 2 -o $OutputDir
