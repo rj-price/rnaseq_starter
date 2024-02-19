@@ -16,19 +16,17 @@ out_dir=/dir/to/output/fastqc_results
 
 To run on a single file:
 ```
-sbatch $scripts_dir/fastqc.sh $reads_dir/file.fq.gz $out_dir
+sbatch "$scripts_dir"/fastqc.sh "$reads_dir"/file.fq.gz "$out_dir"
 ```
 
 To loop through multiple files:
 ```
 for file in "$reads_dir"/*.fq.gz; do
     # Extract filename without extension
-    filename="${file%.*}"
+    filename=$(basename "$file" .fq.gz)
 
-    # Submit your script with appropriate arguments
-    sbatch -o "$out_dir/fastqc_$filename.out" \
-        -e "$out_dir/fastqc_$filename.err" \
-        $scripts_dir/fastqc.sh "$file" "$out_dir"
+    # Submit script with appropriate arguments
+    sbatch "$scripts_dir"/fastqc.sh "$file" "$out_dir"
 
 done
 ```
@@ -42,23 +40,34 @@ multiqc fastqc_results/
 ```
 
 ## Trimmomatic
-Used to trim adapters, low quality sequence and first biased 10bp. Depending on what FastQC metrics look like, you change the trimming parameters.
+Used to trim adapters, low quality sequence and biased first 10bp of each read. Depending on what FastQC metrics look like, you change the trimming parameters in the script.
 
 A usual run for Novogene PE150 data includes ```ILLUMINACLIP, SLIDINGWINDOW:4:20, HEADCROP:10, MINLEN:80```.
+
+Set the reads and output directories (change these to the actual paths):
+```
+reads_dir=/dir/to/reads/
+out_dir=/dir/to/output/trimmed_reads
+```
 
 To run on a single paired end read set:
 ```
 sbatch scripts/trimmomatic_pe.sh \
-    /dir/to/reads/sample1_1.fastq.gz \
-    /dir/to/reads/sample1_2.fastq.gz
+    "$reads_dir"/sample1_1.fq.gz \
+    "$reads_dir"/sample1_2.fq.gz \
+    "$out_dir"
 ```
 
 To loop through multiple samples:
 ```
-for file in /dir/to/reads/*_1.fastq.gz;
-    do Short=$(basename $file _1.fastq.gz)
-    sbatch scripts/trimmomatic_pe.sh $file /dir/to/reads/"$Short"_2.fastq.gz
-    done
+for file in "$reads_dir"/*_1.fq.gz; do
+    # Extract filename without read number and extension
+    filename=$(basename "$file" _1.fq.gz)
+
+    # Submit script with appropriate arguments
+    sbatch "$scripts_dir"/trimmomatic_pe.sh "$file" "$reads_dir"/"$filename"_2.fq.gz "$out_dir"
+    
+done
 ```
 
 ## Salmon
