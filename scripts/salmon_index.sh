@@ -24,8 +24,5 @@ fi
 # CREATE OUTPUT FOLDER
 mkdir -p "$OutDir"
 
-# OUTPUT PREFIX
-Prefix=$(basename "$Transcriptome" .fasta)
-
 # RUN SALMON INDEX
-salmon index -t "$Transcriptome" -i "$OutDir"/"$Prefix"_index --keepDuplicates -k 27
+salmon index -t "$Transcriptome" -i "$OutDir"/transcriptome_index --keepDuplicates -k 27

@@ -36,15 +36,15 @@ Prefix=$(basename "$F_Reads" _1.f*q.gz)
 
 # RUN TRIMMOMATIC
 trimmomatic PE -threads 16 -phred33 "$OutDir/$symF_Reads" "$OutDir/$symR_Reads" \
-    "$OutDir/$Prefix"_paired_R1.fastq.gz "$OutDir/$Prefix"_unpaired_R1.fastq.gz \
-    "$OutDir/$Prefix"_paired_R2.fastq.gz "$OutDir/$Prefix"_unpaired_R2.fastq.gz \
+    "$OutDir/$Prefix"_trimmed_R1.fastq.gz "$OutDir/$Prefix"_unpaired_R1.fastq.gz \
+    "$OutDir/$Prefix"_trimmed_R2.fastq.gz "$OutDir/$Prefix"_unpaired_R2.fastq.gz \
     ILLUMINACLIP:TruSeq3-PE.fa:2:30:10:2:keepBothReads LEADING:3 TRAILING:3 \
     SLIDINGWINDOW:4:20 \
     HEADCROP:10 \
     MINLEN:80
 
 # CLEANUP
-if [[ -s "$OutDir/$Prefix"_paired_R1.fastq.gz && -s "$OutDir/$Prefix"_paired_R2.fastq.gz ]]; then
+if [[ -s "$OutDir/$Prefix"_trimmed_R1.fastq.gz && -s "$OutDir/$Prefix"_trimmed_R2.fastq.gz ]]; then
     rm "$OutDir/$symF_Reads"
     rm "$OutDir/$symR_Reads"
     rm "$OutDir/$Prefix"_unpaired_R1.fastq.gz

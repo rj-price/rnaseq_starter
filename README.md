@@ -72,26 +72,38 @@ done
 ## Salmon
 Used to quantify number of trimmed reads mapping to a fasta file of transcripts.
 
+Set the trimmed reads and output directories (change these to the actual paths):
+```
+reads_dir=/dir/to/trimmed_reads/
+out_dir=/dir/to/output/salmon
+```
+
 First, index the transcript coding sequences fasta file (only needs to be done once for each transcriptome): 
 ```
-sbatch "$scripts_dir"/salmon_index.sh /dir/to/transcriptome/cds_seq.fasta
+sbatch "$scripts_dir"/salmon_index.sh /dir/to/transcriptome/cds_seq.fasta "$out_dir"
 ```
 
 Then, quantify...\
 To run on a single trimmed paired end read set:
 ```
 sbatch "$scripts_dir"/salmon_quant.sh \
-    /dir/to/trimmed_reads/sample1_F_trimmed.fastq.gz \
-    /dir/to/trimmed_reads/sample1_R_trimmed.fastq.gz \
-    /dir/to/transcriptome_index
+    "$reads_dir"/sample1_trimmed_R1.fastq.gz \
+    "$reads_dir"/sample1_trimmed_R2.fastq.gz \
+    "$out_dir"/transcriptome_index \
+    "$out_dir"
 ```
 
 To loop through multiple samples:
 ```
-for file in /dir/to/trimmed_reads/*F_trimmed.fastq.gz;
-    do Short=$(basename $file _F_trimmed.fastq.gz)
-    sbatch "$scripts_dir"/salmon_quant.sh $file /dir/to/trimmed_reads/"$Short"_R_trimmed.fastq.gz /dir/to/transcriptome_index
-    done
+for file in "$reads_dir"/*R1.fastq.gz; do
+
+    # Extract filename without read number and extension
+    filename=$(basename "$file" _R1.fastq.gz)
+
+    # Submit script with appropriate arguments
+    sbatch "$scripts_dir"/salmon_quant.sh "$file" "$reads_dir"/"$filename"_R2.fastq.gz "$out_dir"/transcriptome_index "$out_dir"
+
+done
 ```
 
 ## DESeq2
