@@ -6,7 +6,7 @@ scripts_dir=/dir/to/rnaseq_starter/scripts
 ```
 
 ## FastQC
-Used to check various quality metrics of reads.
+**Used to check various quality metrics of reads.**
 
 Set the reads and output directories (change these to the actual paths):
 ```
@@ -30,7 +30,7 @@ done
 ```
 
 ## MultiQC
-Used to aggregate QC output into a single report for ease of visualisation.
+**Used to aggregate QC output into a single report for ease of visualisation.**
 
 To run on a directory containing QC reports:
 ```
@@ -38,9 +38,9 @@ multiqc fastqc_results/
 ```
 
 ## Trimmomatic
-Used to trim adapters, low quality sequence and biased first 10bp of each read. Depending on what FastQC metrics look like, you change the trimming parameters in the script.
+**Used to trim adapters, low quality sequence and biased first 10bp of each read.** 
 
-A usual run for Novogene PE150 data includes ```ILLUMINACLIP, SLIDINGWINDOW:4:20, HEADCROP:10, MINLEN:80```.
+Depending on what FastQC metrics look like, you change the trimming parameters in the script. A usual run for Novogene PE150 data includes ```ILLUMINACLIP, SLIDINGWINDOW:4:20, HEADCROP:10, MINLEN:80```.
 
 Set the reads and output directories (change these to the actual paths):
 ```
@@ -70,7 +70,7 @@ done
 ```
 
 ## Salmon
-Used to quantify number of trimmed reads mapping to a fasta file of transcripts.
+**Used to quantify number of trimmed reads mapping to a fasta file of transcripts.**
 
 Set the trimmed reads and output directories (change these to the actual paths):
 ```
@@ -107,6 +107,6 @@ done
 ```
 
 ## DESeq2
-Used for differential expression testing.
+**Used for differential expression testing.**
 
 Perform in R, following guide at http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html
