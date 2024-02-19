@@ -22,8 +22,6 @@ sbatch "$scripts_dir"/fastqc.sh "$reads_dir"/file.fq.gz "$out_dir"
 To loop through multiple files:
 ```
 for file in "$reads_dir"/*.fq.gz; do
-    # Extract filename without extension
-    filename=$(basename "$file" .fq.gz)
 
     # Submit script with appropriate arguments
     sbatch "$scripts_dir"/fastqc.sh "$file" "$out_dir"
@@ -52,7 +50,7 @@ out_dir=/dir/to/output/trimmed_reads
 
 To run on a single paired end read set:
 ```
-sbatch scripts/trimmomatic_pe.sh \
+sbatch "$scripts_dir"/trimmomatic_pe.sh \
     "$reads_dir"/sample1_1.fq.gz \
     "$reads_dir"/sample1_2.fq.gz \
     "$out_dir"
@@ -61,6 +59,7 @@ sbatch scripts/trimmomatic_pe.sh \
 To loop through multiple samples:
 ```
 for file in "$reads_dir"/*_1.fq.gz; do
+
     # Extract filename without read number and extension
     filename=$(basename "$file" _1.fq.gz)
 
@@ -75,13 +74,13 @@ Used to quantify number of trimmed reads mapping to a fasta file of transcripts.
 
 First, index the transcript coding sequences fasta file (only needs to be done once for each transcriptome): 
 ```
-sbatch scripts/salmon_index.sh /dir/to/transcriptome/cds_seq.fasta
+sbatch "$scripts_dir"/salmon_index.sh /dir/to/transcriptome/cds_seq.fasta
 ```
 
 Then, quantify...\
 To run on a single trimmed paired end read set:
 ```
-sbatch scripts/salmon_quant.sh \
+sbatch "$scripts_dir"/salmon_quant.sh \
     /dir/to/trimmed_reads/sample1_F_trimmed.fastq.gz \
     /dir/to/trimmed_reads/sample1_R_trimmed.fastq.gz \
     /dir/to/transcriptome_index
@@ -91,7 +90,7 @@ To loop through multiple samples:
 ```
 for file in /dir/to/trimmed_reads/*F_trimmed.fastq.gz;
     do Short=$(basename $file _F_trimmed.fastq.gz)
-    sbatch scripts/salmon_quant.sh $file /dir/to/trimmed_reads/"$Short"_R_trimmed.fastq.gz /dir/to/transcriptome_index
+    sbatch "$scripts_dir"/salmon_quant.sh $file /dir/to/trimmed_reads/"$Short"_R_trimmed.fastq.gz /dir/to/transcriptome_index
     done
 ```
 

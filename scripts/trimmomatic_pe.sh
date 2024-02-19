@@ -11,7 +11,13 @@ OutDir=$3
 
 # CHECK INPUTS
 if [[ ! -f "$F_Reads" || ! "$F_Reads" =~ \.(fq|fastq)\.gz$ || ! -f "$R_Reads" || ! "$R_Reads" =~ \.(fq|fastq)\.gz$ ]]; then
-    echo -e "ERROR: Input files don't exist or have invalid extension (.fq.gz or .fastq.gz required). \n"
+    echo -e "\nERROR: Input files don't exist or have invalid extension (.fq.gz or .fastq.gz required). \n"
+    echo -e "Usage: sbatch trimmomatic_pe.sh <fastq_file_1.fq.gz> <fastq_file_2.fq.gz> <output_directory> \n"
+    exit 1
+fi
+
+if [ -z "$OutDir" ]; then
+    echo -e "\nERROR: Output directory argument is missing. \n"
     echo -e "Usage: sbatch trimmomatic_pe.sh <fastq_file_1.fq.gz> <fastq_file_2.fq.gz> <output_directory> \n"
     exit 1
 fi
