@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #SBATCH -J salmon
-#SBATCH --partition=medium
+#SBATCH --partition=short
 #SBATCH --mem=2G
 #SBATCH --cpus-per-task=4
 
@@ -33,7 +33,7 @@ fi
 mkdir -p "$OutDir"
 
 # OUTPUT PREFIX
-Prefix=$(basename "$F_Reads" _trimmed_R1.f*q.gz)
+Prefix=$(basename "$F_Reads" _trimmed_R1.fq.gz$)
 
 # RUN SALMON QUANT
 salmon quant \
@@ -47,4 +47,4 @@ salmon quant \
     --dumpEq \
     --seqBias \
     --gcBias \
-    -o "$Prefix"_quant
+    -o "$OutDir"/"$Prefix"_quant

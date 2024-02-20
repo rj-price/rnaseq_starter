@@ -25,17 +25,11 @@ fi
 # CREATE OUTPUT FOLDER
 mkdir -p "$OutDir"
 
-# CREATE SYMBOLIC LINKS TO READS
-ln -s "$F_Reads" "$OutDir"
-ln -s "$R_Reads" "$OutDir"
-symF_Reads=$(basename "$F_Reads")
-symR_Reads=$(basename "$R_Reads")
-
 # OUTPUT PREFIX
-Prefix=$(basename "$F_Reads" _1.f*q.gz)
+Prefix=$(basename "$F_Reads" _1.fq.gz)
 
 # RUN TRIMMOMATIC
-trimmomatic PE -threads 16 -phred33 "$OutDir/$symF_Reads" "$OutDir/$symR_Reads" \
+trimmomatic PE -threads 16 -phred33 "$F_Reads" "$R_Reads" \
     "$OutDir/$Prefix"_trimmed_R1.fastq.gz "$OutDir/$Prefix"_unpaired_R1.fastq.gz \
     "$OutDir/$Prefix"_trimmed_R2.fastq.gz "$OutDir/$Prefix"_unpaired_R2.fastq.gz \
     ILLUMINACLIP:TruSeq3-PE.fa:2:30:10:2:keepBothReads LEADING:3 TRAILING:3 \
@@ -45,8 +39,6 @@ trimmomatic PE -threads 16 -phred33 "$OutDir/$symF_Reads" "$OutDir/$symR_Reads" 
 
 # CLEANUP
 if [[ -s "$OutDir/$Prefix"_trimmed_R1.fastq.gz && -s "$OutDir/$Prefix"_trimmed_R2.fastq.gz ]]; then
-    rm "$OutDir/$symF_Reads"
-    rm "$OutDir/$symR_Reads"
     rm "$OutDir/$Prefix"_unpaired_R1.fastq.gz
     rm "$OutDir/$Prefix"_unpaired_R2.fastq.gz
 else
