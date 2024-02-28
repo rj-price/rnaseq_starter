@@ -9,20 +9,15 @@ Transcriptome=$1
 OutDir=$2
 
 # CHECK INPUTS
-if [[ ! -f "$Transcriptome" || ! "$Transcriptome" =~ \.(fa|fna|fasta)$ ]]; then
-    echo -e "\nERROR: Input file doesn't exist or has an invalid extension (.fa .fna or .fasta required). \n"
+if [[ -f "$Transcriptome" && "$Transcriptome" =~ \.(fa|fna|fasta)$ && -n "$OutDir" ]]; then
+    # CREATE OUTPUT FOLDER
+    mkdir -p "$OutDir"
+
+    # RUN SALMON INDEX
+    salmon index -t "$Transcriptome" -i "$OutDir"/transcriptome_index --keepDuplicates -k 27
+else
+    # PRINT ERROR & USAGE MESSAGES
+    echo -e "\nERROR: Expected inputs not found. Please provide a transcriptome CDS file (.fa .fna or .fasta required) and an output directory. \n"
     echo -e "Usage: sbatch salmon_index.sh <transcriptome_cds.fasta> <output_directory> \n"
     exit 1
 fi
-
-if [ -z "$OutDir" ]; then
-    echo -e "\nERROR: Output directory argument is missing. \n"
-    echo -e "Usage: sbatch salmon_index.sh <transcriptome_cds.fasta> <output_directory> \n"
-    exit 1
-fi
-
-# CREATE OUTPUT FOLDER
-mkdir -p "$OutDir"
-
-# RUN SALMON INDEX
-salmon index -t "$Transcriptome" -i "$OutDir"/transcriptome_index --keepDuplicates -k 27
