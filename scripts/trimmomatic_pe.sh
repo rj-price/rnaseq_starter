@@ -15,7 +15,7 @@ if [[ -f "$F_Reads" && "$F_Reads" =~ \.(fq|fastq)\.gz$ && -f "$R_Reads" && "$R_R
     mkdir -p "$OutDir"
 
     # OUTPUT PREFIX
-    Prefix=$(basename "$F_Reads" _1.fq.gz)
+    Prefix=$(basename "$F_Reads" | sed 's/_1.f.*q.gz$//g')
 
     # RUN TRIMMOMATIC
     trimmomatic PE -threads 16 -phred33 "$F_Reads" "$R_Reads" \

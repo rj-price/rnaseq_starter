@@ -16,7 +16,7 @@ if [[ -f "$F_Reads" && "$F_Reads" =~ \.(fq|fastq)\.gz$ && -f "$R_Reads" && "$R_R
     mkdir -p "$OutDir"
 
     # OUTPUT PREFIX
-    Prefix=$(basename "$F_Reads" _trimmed_R1.fq.gz$)
+    Prefix=$(basename "$F_Reads" | sed 's/_trimmed_R1.f.*q.gz$//g')
 
     # RUN SALMON QUANT
     salmon quant \
