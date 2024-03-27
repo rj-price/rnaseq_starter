@@ -21,7 +21,7 @@ conda activate rnaseq
 This analysis pipeline processes Illumina paired end reads generated from RNA-seq experiments.
 
 ### Output
-The main output from this pipeline are the quantification files that can be used in downstream differential expression testing.
+The main outputs from this pipeline are the quantification files that can be used in downstream differential expression testing.
 
 
 <br>
